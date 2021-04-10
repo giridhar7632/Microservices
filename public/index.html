@@ -9,6 +9,7 @@
     />
     <title>Microservices</title>
   </head>
+
   <body>
     <section class="hero is-primary has-text-centered mt-6">
       <div class="hero-body">
@@ -23,42 +24,57 @@
       </div>
     </section>
     <div class="container p-2">
-      <div class="tile is-ancestor mt-2">
+      <div class="tile is-ancestor mt-4">
         <div class="tile is-vertical is-8">
           <div class="tile">
             <div class="tile is-parent is-vertical">
               <article class="tile is-child notification is-danger">
-                <p class="title">Vertical...</p>
-                <p class="subtitle">Top tile</p>
+                <a href="/timestamp" style="text-decoration: none">
+                  <p class="title">Timestamp</p>
+                  <p class="subtitle">An API service that handles dates</p>
+                </a>
               </article>
+
               <article class="tile is-child notification is-success">
-                <p class="title">...tiles</p>
-                <p class="subtitle">Bottom tile</p>
+                <a href="/headerparser" style="text-decoration: none">
+                  <p class="title">Request Header Parser</p>
+                  <p class="subtitle">An API service that parses request</p>
+                </a>
               </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification is-info">
-                <p class="title">Middle tile</p>
-                <p class="subtitle">With an image</p>
+                <a href="/urlshortner" style="text-decoration: none">
+                  <p class="title">URL Shortener</p>
+                  <p class="subtitle">
+                    An API service that that gives shortned link for your URL
+                  </p>
+                </a>
               </article>
             </div>
           </div>
         </div>
         <div class="tile is-parent is-vertical">
           <article class="tile is-child notification is-dark">
-            <p class="title">Vertical...</p>
-            <p class="subtitle">Top tile</p>
+            <a href="/exercise-tracker" style="text-decoration: none">
+              <p class="title">Exercise Tracker</p>
+              <p class="subtitle">Track your exercise schedule</p>
+            </a>
           </article>
           <article class="tile is-child notification is-warning">
-            <p class="title">...tiles</p>
-            <p class="subtitle">Bottom tile</p>
+            <a href="/filemetadata" style="text-decoration: none">
+              <p class="title">File Metadata</p>
+              <p class="subtitle">
+                An API service that handles files you upload
+              </p>
+            </a>
           </article>
         </div>
       </div>
-      <footer class="footer has-text-centered">
-        <hr />
-        by <a href="https://github.com/giridhar7632">@giridhar7632</a>
-      </footer>
     </div>
+    <footer class="footer has-text-centered">
+      <hr />
+      by <a href="https://github.com/giridhar7632">@giridhar7632</a>
+    </footer>
   </body>
 </html>
