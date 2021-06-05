@@ -134,13 +134,13 @@ const userSchema = new Schema({
 const Exercise = mongoose.model('Exercise', exerciseSchema)
 const User = mongoose.model('User', userSchema)
 
-app.get('/exercise-tracker/api/users', (req, res) => {
+app.get('/api/users', (req, res) => {
 	User.find({})
 		.then((users) => res.json(users))
 		.catch((err) => res.status(400).json('Error: ' + err))
 })
 
-app.post('/exercise-tracker/api/users', (req, res) => {
+app.post('/api/users', (req, res) => {
 	const username = req.body.username
 
 	const newUser = new User({ username })
@@ -155,7 +155,7 @@ app.post('/exercise-tracker/api/users', (req, res) => {
 		})
 })
 
-app.post('/exercise-tracker/api/users/:_id/exercises', (req, res) => {
+app.post('/api/users/:_id/exercises', (req, res) => {
 	const userid = req.body[':_id']
 	const description = req.body.description
 	const duration = Number(req.body.duration)
@@ -183,7 +183,7 @@ app.post('/exercise-tracker/api/users/:_id/exercises', (req, res) => {
 		.catch((err) => res.status(400).json('Error: ' + err))
 })
 
-app.get('/exercise-tracker/api/users/:_id/logs', (req, res) => {
+app.get('/api/users/:_id/logs', (req, res) => {
 	User.findById(req.params._id)
 		.then((data) => {
 			let resObj = data._doc

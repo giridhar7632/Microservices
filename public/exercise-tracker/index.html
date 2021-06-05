@@ -35,7 +35,7 @@
 			<div class="container has-text-centered">
 				<div class="mb-4">
 					<p class="is-size-4 has-text-weight-semibold">Create a New User</p>
-					<form action="/exercise-tracker/api/users" method="POST">
+					<form action="../api/users" method="POST">
 						<div class="field">
 							<div class="control">
 								<div class="columns is-mobile">
@@ -51,12 +51,12 @@
 								</div>
 							</div>
 						</div>
-						<input class="button is-dark" type="submit" value="Submit" />
+						<input class="button is-dark mb-4" type="submit" value="Submit" />
 					</form>
 
 					<p class="is-size-4 has-text-weight-semibold">Add Exercise</p>
 					<form
-						action="/exercise-tracker/api/users/:_id/exercises"
+						action="../api/users/:_id/exercises"
 						method="POST"
 					>
 						<div class="field">
@@ -100,5 +100,9 @@
 				</div>
 			</div>
 		</section>
+    <footer class="footer has-text-centered">
+			<hr />
+			by <a href="https://github.com/giridhar7632">@giridhar7632</a>
+		</footer>
 	</body>
 </html>
