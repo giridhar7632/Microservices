@@ -63,17 +63,23 @@ app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
 
 // url shortner
 const uri = process.env.MONGO_URI
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(uri, {
+	useNewUrlParser: true,
+	useCreateIndex: true,
+	useFindAndModify: false,
+})
 
 const connection = mongoose.connection
 connection.once('open', () => {
 	console.log('MongoDB connection is established successfully')
 })
 
-const schema = new mongoose.Schema({ url: 'string' })
-const Url = mongoose.model('Url', schema)
+const Schema = mongoose.Schema
 
-app.post('/urlshortner/api/shorturl/new', async function (req, res) {
+const urlSchema = new Schema({ url: 'string' })
+const Url = mongoose.model('Url', urlSchema)
+
+app.post('/api/shorturl/new', async function (req, res) {
 	console.log(req.body)
 	const bodyUrl = req.body.url
 
@@ -101,6 +107,114 @@ app.get('/api/shorturl/:id', (req, res) => {
 			res.redirect(data.url)
 		}
 	})
+})
+
+// exercise tracker
+
+const exerciseSchema = new Schema({
+	description: {
+		type: String,
+		required: true,
+	},
+	duration: {
+		type: Number,
+		required: true,
+	},
+	date: String,
+})
+
+const userSchema = new Schema({
+	username: {
+		type: String,
+		required: true,
+	},
+	log: [exerciseSchema],
+})
+
+const Exercise = mongoose.model('Exercise', exerciseSchema)
+const User = mongoose.model('User', userSchema)
+
+app.get('/exercise-tracker/api/users', (req, res) => {
+	User.find({})
+		.then((users) => res.json(users))
+		.catch((err) => res.status(400).json('Error: ' + err))
+})
+
+app.post('/exercise-tracker/api/users', (req, res) => {
+	const username = req.body.username
+
+	const newUser = new User({ username })
+
+	newUser
+		.save()
+		.then((data) => {
+			res.json({ username: data.username, _id: data._id })
+		})
+		.catch((err) => {
+			res.status(400).json('Error: ' + err)
+		})
+})
+
+app.post('/exercise-tracker/api/users/:_id/exercises', (req, res) => {
+	const userid = req.body[':_id']
+	const description = req.body.description
+	const duration = Number(req.body.duration)
+	let date = req.body.date
+	if (date === '') {
+		date = new Date().toISOString().substring(0, 10)
+	}
+
+	const newExercise = new Exercise({
+		description,
+		duration,
+		date,
+	})
+
+	User.findByIdAndUpdate(userid, { $push: { log: newExercise } }, { new: true })
+		.then((data) =>
+			res.json({
+				_id: data._id,
+				username: data.username,
+				date: new Date(newExercise.date).toDateString(),
+				duration: newExercise.duration,
+				description: newExercise.description,
+			})
+		)
+		.catch((err) => res.status(400).json('Error: ' + err))
+})
+
+app.get('/exercise-tracker/api/users/:_id/logs', (req, res) => {
+	User.findById(req.params._id)
+		.then((data) => {
+			let resObj = data._doc
+
+			if (req.query.form || req.query.to) {
+				let fromDate = new Date(0)
+				let toDate = new Date()
+
+				if (req.query.from) {
+					fromDate = new Date(req.query.from)
+				}
+				if (req.query.to) {
+					toDate = new Date(req.query.to)
+				}
+
+				fromDate = fromDate.getTime()
+				toDate = toDate.getTime()
+
+				resObj.log = resObj.log.filter((exercise) => {
+					let exerciseDate = new Date(exercise.date).getTime()
+
+					return exerciseDate >= fromDate && exerciseDate <= toDate
+				})
+			}
+			if (req.query.limit) {
+				resObj.log = resObj.log.slice(0, req.query.limit)
+			}
+
+			res.json({ ...resObj, count: data.log.length })
+		})
+		.catch((err) => res.status(400).json('Error: ' + err))
 })
 
 app.listen(port, (err) => {
