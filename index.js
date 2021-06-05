@@ -73,7 +73,7 @@ connection.once('open', () => {
 const schema = new mongoose.Schema({ url: 'string' })
 const Url = mongoose.model('Url', schema)
 
-app.post('/urlshortner/api/shorturl/new', async function (req, res) {
+app.post('/api/shorturl/new', async function (req, res) {
 	console.log(req.body)
 	const bodyUrl = req.body.url
 
